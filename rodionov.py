@@ -15,11 +15,11 @@ def rodionov_regimes(data, l, p):
 
     Args:
         data (array): Timeseries array of std values
-        l (_type_): _description_
-        p (_type_): _description_
+        l (int): The assumed minimum regime length
+        p (float): The singificance probability to use when assessing shifts
 
     Returns:
-        _type_: _description_
+        list, list: Two lists: The regime-shift indices, the RSI values 
     """
     # Step 1: Set the cut-off length l of the regimes
     # l: Number of years for each regime
