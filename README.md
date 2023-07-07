@@ -32,21 +32,25 @@ Below, I provide both a verbal explanation of the process along with the Python 
 ### Rodionov's algorithm in words
 
 ***Step 1: Set parameters (l & p)***
-In Rodionov's sequential regime algorithm, the first step is to specify the expected minimum length of a regime (denoted as $l$) and a required statistical significance level ($p$) used to test regime differences. 
 
-Additionally, the average variance of all periods of length $l$ in the data record is calculated, and each regime is assumed to have the average variance. 
+In Rodionov's sequential regime algorithm, the first step is to specify the expected minimum length of a regime (denoted as ***l***) and a required statistical significance level (***p***) used to test regime differences. 
+
+Additionally, the average variance of all periods of length ***l*** in the data record is calculated, and each regime is assumed to have the average variance. 
 
 ***Step 2: Determine statistically significant deviation values***
+
 The algorithm defines the threshold for identifying potential new regimes based on how different a value needs to be from the mean of the current regime for it to be considered a *potential regime shift*.
 
-This difference depends on a Student's t-test value, the minimum regime length, average variance, and the user-specified significance level ($p$).
+This difference depends on a Student's t-test value, the minimum regime length, average variance, and the user-specified significance level (***p***).
 
 ***Step 3: Calculate initial regime statistics***
-Assume that the initial regime is the first $l$ days, specified in *Step 1*.
+
+Assume that the initial regime is the first ***l*** days, specified in *Step 1*.
 
 The mean of this initial regime is calculated, and upper and lower significance bounds are established using the difference value obtained in *Step 2*.  Upper and lower bounds are equal to the mean plus/minus the significant difference value.
 
 ***Step 4: Identifying potential regime shift points***
+
 One-by-one test each subsequent value in the series to tested to determine if it exceeds the upper or lower bounds established for the current regime distribution.
 
 If the value is inside the bounds of the current regime, then re-calculate the current regime mean including the new point, and move on to the next day. 
@@ -54,23 +58,26 @@ If the value is inside the bounds of the current regime, then re-calculate the c
 If a value is outside the bounds of the current regime, then consider that point as a potential regime shift (*Step 5*).  
 
 ***Step 5: Testing a potential regime shift***
+
 Once a potential regime shift is detected, adopt a null hypothesis that the new regime has a mean equal to the statistically significant boundary value of the previous regime distribution that was exceeded.
 
-The regime shift hypothesis is then assessed by calculating the *Regime Shift Index (RSI)*, which is a cumulative measure of exceedances beyond the prior regime's significance value. The cumulative sum of exceedances over the minimum regime length ($l$) defines the RSI for the potential regime shift point.
+The regime shift hypothesis is then assessed by calculating the *Regime Shift Index (RSI)*, which is a cumulative measure of exceedances beyond the prior regime's significance value. The cumulative sum of exceedances over the minimum regime length (***l***) defines the RSI for the potential regime shift point.
 
 ***Step 6: Rejecting potential regime shifts***
-If *RSI* $<0$ at any point within the $l$-periods after the initial shift period, then the new-regime hypothesis is rejected.
+
+If *RSI* ***<0*** at any point within the ***l***-periods after the initial shift period, then the new-regime hypothesis is rejected.
 
 When the potential shift is rejected, the mean of the prior regime is modified to incorporate the potential shift point into the distribution, and the analysis continues by returning to *Step 4* to search for additional potential regime shifts.
 
 ***Step 7: Accepting regime shifts***
-If *RSI* $>0$ after accumulating over the minimum regime length ($l$), then the new regime $R2$ is identified as significant.
 
-Once the new regime is adopted, the mean of the new regime is calculated for the first $l$ periods of $R2$, and new significance bounds are calculated using the significant difference value from *Step 2.* 
+If *RSI* ***>0*** after accumulating over the minimum regime length (***l***), then the new regime ***R2*** is identified as significant.
 
-The regime-shift-search is continued, starting on the first day of the new regime $R2$ (*Return to Step 4.*) 
+Once the new regime is adopted, the mean of the new regime is calculated for the first ***l*** periods of ***R2***, and new significance bounds are calculated using the significant difference value from *Step 2.* 
 
-Notably, by resuming the search at the *start of $R2$*, regimes can be shorter than the specified minimum length $l$, and re-assessing the values in $R2$ lessens the impact of making assumptions about $l$.  
+The regime-shift-search is continued, starting on the first day of the new regime ***R2*** (*Return to Step 4.*) 
+
+Notably, by resuming the search at the *start of ***R2****, regimes can be shorter than the specified minimum length ***l***, and re-assessing the values in ***R2*** lessens the impact of making assumptions about ***l***.  
 
 ### Rodionov's algorithm in code
 
